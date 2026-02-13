@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nourish — From Grocery List to Dinner Table</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-bg: #FAFAF7;
+    --c-surface: #FFFFFF;
+    --c-text: #1A1A1A;
+    --c-text-secondary: #5C5C5C;
+    --c-text-muted: #8A8A8A;
+    --c-accent: #2D6A4F;
+    --c-accent-light: #D8F3DC;
+    --c-accent-dark: #1B4332;
+    --c-warm: #E76F51;
+    --c-warm-light: #FFF1EB;
+    --c-border: #E8E6E1;
+    --c-card: #F5F4F0;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'DM Sans', -apple-system, sans-serif;
+    --max-w: 860px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--c-text);
+    background: var(--c-bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--c-accent-light);
+    color: var(--c-accent-dark);
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250, 250, 247, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--c-border);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: 0 1px 12px rgba(0,0,0,0.06); }
+  .nav-inner {
+    max-width: var(--max-w);
+    margin: 0 auto; padding: 0.9rem 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: var(--font-display); font-size: 1.35rem;
+    color: var(--c-accent-dark); text-decoration: none; letter-spacing: -0.02em;
+  }
+  .nav-links { display: flex; gap: 1.8rem; }
+  .nav-links a {
+    font-size: 0.82rem; font-weight: 500; color: var(--c-text-secondary);
+    text-decoration: none; letter-spacing: 0.04em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--c-accent); }
+
+  /* ---- HERO ---- */
+  .hero {
+    max-width: var(--max-w); margin: 0 auto;
+    padding: 8rem 1.5rem 6rem;
+  }
+  .hero-eyebrow {
+    display: inline-block; font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--c-accent);
+    background: var(--c-accent-light); padding: 0.35rem 0.9rem;
+    border-radius: 100px; margin-bottom: 1.5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 5.5vw, 3.8rem);
+    line-height: 1.15; letter-spacing: -0.025em;
+    color: var(--c-text); max-width: 700px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  .hero h1 em { font-style: italic; color: var(--c-accent); }
+  .hero-sub {
+    font-size: 1.15rem; color: var(--c-text-secondary);
+    max-width: 560px; margin-top: 1.25rem; line-height: 1.75;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .hero-meta {
+    margin-top: 2rem; display: flex; gap: 2rem; flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .hero-meta-item { font-size: 0.82rem; color: var(--c-text-muted); }
+  .hero-meta-item strong {
+    display: block; font-size: 0.92rem; color: var(--c-text);
+    font-weight: 600; margin-bottom: 0.1rem;
+  }
+
+  /* ---- SECTIONS ---- */
+  section {
+    max-width: var(--max-w); margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+  .section-label {
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--c-accent); margin-bottom: 0.6rem;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 1rem;
+  }
+  h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem; line-height: 1.3;
+    margin-bottom: 0.5rem; color: var(--c-text);
+  }
+  p { color: var(--c-text-secondary); margin-bottom: 1rem; }
+  p:last-child { margin-bottom: 0; }
+
+  /* ---- DIVIDER ---- */
+  .divider { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem; }
+  .divider hr { border: none; border-top: 1px solid var(--c-border); margin-bottom: 4rem; }
+
+  /* ---- PROBLEM CARDS ---- */
+  .problem-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1rem; margin-top: 1.5rem;
+  }
+  .problem-card {
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: 12px; padding: 1.4rem 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .problem-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+  .problem-card .app-name {
+    font-weight: 600; font-size: 0.95rem; color: var(--c-text);
+    margin-bottom: 0.3rem;
+  }
+  .problem-card .app-desc {
+    font-size: 0.88rem; color: var(--c-text-muted);
+    line-height: 1.55; margin: 0;
+  }
+
+  /* ---- FLOW STEPS ---- */
+  .flow-steps {
+    margin-top: 1.5rem; display: flex; flex-direction: column;
+    position: relative;
+  }
+  .flow-step {
+    display: grid; grid-template-columns: 56px 1fr;
+    gap: 1rem; align-items: start;
+  }
+  .flow-step-indicator {
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .flow-step-number {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--c-accent); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
+  }
+  .flow-step-line {
+    width: 2px; flex: 1; background: var(--c-accent-light); min-height: 24px;
+  }
+  .flow-step:last-child .flow-step-line { display: none; }
+  .flow-step-content { padding: 0.3rem 0 2rem; }
+  .flow-step-content h3 { margin-bottom: 0.25rem; }
+  .flow-step-content p { font-size: 0.92rem; margin: 0; color: var(--c-text-secondary); }
+
+  /* ---- DIFFERENTIATOR CARDS ---- */
+  .diff-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1rem; margin-top: 1.5rem;
+  }
+  .diff-card { background: var(--c-card); border-radius: 12px; padding: 1.5rem; }
+  .diff-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--c-accent-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; margin-bottom: 0.75rem;
+  }
+  .diff-card h3 { font-size: 1.05rem; }
+  .diff-card p { font-size: 0.88rem; margin: 0; }
+
+  /* ---- PERSONA CARDS ---- */
+  .persona-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.25rem; margin-top: 1.5rem;
+  }
+  .persona-card {
+    border: 1px solid var(--c-border); border-radius: 12px; overflow: hidden;
+  }
+  .persona-header {
+    padding: 1rem 1.4rem; font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .persona-card.primary .persona-header { background: var(--c-accent); color: white; }
+  .persona-card.secondary .persona-header { background: var(--c-card); color: var(--c-text-secondary); }
+  .persona-body { padding: 1.4rem; }
+  .persona-body h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+  .persona-body .demo { font-size: 0.82rem; color: var(--c-text-muted); margin-bottom: 0.75rem; }
+  .persona-body p { font-size: 0.9rem; margin: 0; }
+
+  /* ---- QUOTE ---- */
+  .quote-block {
+    background: var(--c-card); border-left: 3px solid var(--c-accent);
+    border-radius: 0 12px 12px 0; padding: 1.5rem 2rem; margin: 1.5rem 0;
+  }
+  .quote-block p {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 1.15rem; line-height: 1.6; color: var(--c-text); margin: 0;
+  }
+  .quote-attr {
+    font-family: var(--font-body) !important; font-style: normal !important;
+    font-size: 0.82rem !important; color: var(--c-text-muted) !important;
+    display: block; margin-top: 0.6rem;
+  }
+
+  /* ---- ROLE ---- */
+  .role-items {
+    margin-top: 1.25rem; display: flex; flex-direction: column; gap: 1.25rem;
+  }
+  .role-item {
+    padding-left: 1.25rem; position: relative;
+  }
+  .role-item::before {
+    content: '';
+    position: absolute; left: 0; top: 0.55em;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--c-accent);
+  }
+  .role-item p { margin: 0; font-size: 0.95rem; }
+
+  /* ---- TIMELINE ---- */
+  .timeline { margin-top: 1.5rem; position: relative; }
+  .timeline::before {
+    content: ''; position: absolute;
+    left: 7px; top: 0; bottom: 0;
+    width: 2px; background: var(--c-border);
+  }
+  .tl-phase {
+    position: relative; padding-left: 36px; padding-bottom: 2rem;
+  }
+  .tl-phase:last-child { padding-bottom: 0; }
+  .tl-dot {
+    position: absolute; left: 0; top: 2px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 3px solid var(--c-accent);
+    background: var(--c-bg);
+    box-sizing: border-box;
+  }
+  .tl-phase.active .tl-dot {
+    background: var(--c-accent);
+    box-shadow: 0 0 0 4px var(--c-accent-light);
+  }
+  .tl-header {
+    display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap;
+  }
+  .tl-title { font-weight: 600; font-size: 1rem; color: var(--c-text); }
+  .tl-weeks { font-size: 0.8rem; color: var(--c-text-muted); font-weight: 500; }
+  .tl-desc {
+    font-size: 0.88rem; color: var(--c-text-secondary);
+    margin-top: 0.3rem; line-height: 1.6;
+  }
+  .tl-hours {
+    display: inline-block; font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.05em; color: var(--c-accent);
+    background: var(--c-accent-light); padding: 0.15rem 0.55rem;
+    border-radius: 100px; margin-top: 0.4rem;
+  }
+
+  /* ---- LINK CARDS ---- */
+  .links-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1rem; margin-top: 1.5rem;
+  }
+  .link-card {
+    display: block; background: var(--c-surface);
+    border: 1px solid var(--c-border); border-radius: 12px;
+    padding: 1.4rem 1.5rem; text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+  .link-card:hover {
+    border-color: var(--c-accent);
+    box-shadow: 0 4px 20px rgba(45,106,79,0.08);
+    transform: translateY(-2px);
+  }
+  .link-card .link-title {
+    font-weight: 600; font-size: 0.95rem; color: var(--c-text); margin-bottom: 0.2rem;
+  }
+  .link-card .link-desc { font-size: 0.82rem; color: var(--c-text-muted); margin: 0; }
+  .link-card .link-arrow {
+    display: inline-block; color: var(--c-accent);
+    font-size: 0.82rem; margin-top: 0.5rem; font-weight: 500;
+  }
+
+  /* ---- FOOTER ---- */
+  footer {
+    max-width: var(--max-w); margin: 0 auto;
+    padding: 2rem 1.5rem 3rem; text-align: center;
+    font-size: 0.82rem; color: var(--c-text-muted);
+  }
+
+  /* ---- ANIMATIONS ---- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 640px) {
+    .problem-grid, .diff-grid, .persona-grid, .links-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero { padding-top: 6.5rem; }
+    .nav-links { gap: 1rem; }
+    .nav-links a { font-size: 0.72rem; }
+    .hero-meta { gap: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Nourish</a>
+    <div class="nav-links">
+      <a href="#problem">Problem</a>
+      <a href="#vision">Vision</a>
+      <a href="#users">Users</a>
+      <a href="#role">Role</a>
+      <a href="#timeline">Timeline</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">Building in Public</div>
+  <h1>Turn what you have into <em>what you'll love to eat.</em></h1>
+  <p class="hero-sub">Nourish is an AI-powered cooking assistant that generates personalized recipes from the groceries already in your kitchen — then walks you through every step.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <strong>Keon Lee</strong>
+      Co-Founder &amp; Product Lead
+    </div>
+    <div class="hero-meta-item">
+      <strong>Feb 2026 – Present</strong>
+      19-week MVP sprint
+    </div>
+    <div class="hero-meta-item">
+      <strong>React Native + Claude API</strong>
+      Expo · Node.js · PostgreSQL
+    </div>
+  </div>
+</header>
+
+<div class="divider"><hr></div>
+
+<section id="problem" class="reveal">
+  <div class="section-label">The Problem</div>
+  <h2>Groceries in the fridge. No idea what to cook.</h2>
+  <p>Most people don't lack ingredients — they lack the bridge from raw groceries to a finished meal. The result is wasted food, wasted money, and another night of instant noodles or takeout. Existing apps solve fragments of the cooking journey, but none connect inventory to recipe to guidance in one flow.</p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="app-name">Tasty</div>
+      <p class="app-desc">Entertaining recipes, but browsing-first — no personalization to what you already own.</p>
+    </div>
+    <div class="problem-card">
+      <div class="app-name">Supercook</div>
+      <p class="app-desc">Searches by ingredient, but limited AI and poor mobile experience.</p>
+    </div>
+    <div class="problem-card">
+      <div class="app-name">Mealime</div>
+      <p class="app-desc">Strong recipe-to-grocery flow, but starts with recipes — not your fridge.</p>
+    </div>
+    <div class="problem-card">
+      <div class="app-name">MyFitnessPal</div>
+      <p class="app-desc">Gold standard for nutrition, but entirely disconnected from actual cooking.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<section id="vision" class="reveal">
+  <div class="section-label">Core Flow</div>
+  <h2>From grocery list to dinner table.</h2>
+  <p>Nourish inverts the typical recipe app model. Instead of starting with a recipe and building a shopping list, we start with what's already in your kitchen and generate a recipe you can actually cook tonight.</p>
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-step-indicator">
+        <div class="flow-step-number">1</div>
+        <div class="flow-step-line"></div>
+      </div>
+      <div class="flow-step-content">
+        <h3>Input your groceries</h3>
+        <p>Quick manual entry with fuzzy-match autocomplete across 1,000+ ingredients. Your kitchen inventory persists across sessions.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-indicator">
+        <div class="flow-step-number">2</div>
+        <div class="flow-step-line"></div>
+      </div>
+      <div class="flow-step-content">
+        <h3>Set your preferences</h3>
+        <p>Dietary restrictions, skill level, time budget, servings, and meal type. Saved to your profile — set once, used every time.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-indicator">
+        <div class="flow-step-number">3</div>
+        <div class="flow-step-line"></div>
+      </div>
+      <div class="flow-step-content">
+        <h3>Generate a recipe with AI</h3>
+        <p>One tap. Claude generates a structured, skill-appropriate recipe with ingredients, nutrition, and integrated timer data — in under 5 seconds.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-indicator">
+        <div class="flow-step-number">4</div>
+        <div class="flow-step-line"></div>
+      </div>
+      <div class="flow-step-content">
+        <h3>Cook with guided steps</h3>
+        <p>Full-screen cooking mode with large text, step-by-step navigation, integrated countdown timers, and keep-screen-awake — designed for messy hands at arm's length.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-indicator">
+        <div class="flow-step-number">5</div>
+        <div class="flow-step-line"></div>
+      </div>
+      <div class="flow-step-content">
+        <h3>Rate, save, and cook again</h3>
+        <p>Rate recipes, save favorites to your cookbook, and browse your full history. Every recipe is stored so you never lose one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<section class="reveal">
+  <div class="section-label">What Sets Us Apart</div>
+  <h2>Built different.</h2>
+  <div class="diff-grid">
+    <div class="diff-card">
+      <div class="diff-icon">🧠</div>
+      <h3>AI-first, not search-first</h3>
+      <p>Recipes generated on demand from your exact ingredients — not pulled from a static database.</p>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">🥬</div>
+      <h3>Inventory-driven</h3>
+      <p>Start with what you have, not what you need to buy. The fridge is the starting line.</p>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">👩‍🍳</div>
+      <h3>Beginner-focused guidance</h3>
+      <p>Skill-calibrated recipes with step-by-step cooking mode and integrated timers.</p>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">⚡</div>
+      <h3>One app, whole flow</h3>
+      <p>Inventory tracking, recipe generation, cooking guidance, and history — no app-switching.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<section id="users" class="reveal">
+  <div class="section-label">Target Users</div>
+  <h2>Who we're building for.</h2>
+  <div class="persona-grid">
+    <div class="persona-card primary">
+      <div class="persona-header">Primary Persona</div>
+      <div class="persona-body">
+        <h3>The Overwhelmed Beginner</h3>
+        <p class="demo">Age 22–28 · Students, recent grads, early-career professionals</p>
+        <p>Has groceries but doesn't know what to make. Intimidated by complex recipes. Defaults to takeout or instant meals. Wants to eat healthier and save money but lacks confidence in the kitchen.</p>
+      </div>
+    </div>
+    <div class="persona-card secondary">
+      <div class="persona-header">Secondary Persona</div>
+      <div class="persona-body">
+        <h3>The Busy Health-Conscious Cook</h3>
+        <p class="demo">Age 28–40 · Working professionals, parents</p>
+        <p>Knows how to cook but stuck in a rotation of the same 5–7 meals. Wants variety without the planning overhead. Needs quick solutions that fit dietary goals.</p>
+      </div>
+    </div>
+  </div>
+  <div class="quote-block">
+    <p>"I have chicken, rice, and some random vegetables in my fridge, but I have no idea what to make with them. I usually just order Uber Eats."<span class="quote-attr">— Interview participant, matches primary persona</span></p>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<section id="role" class="reveal">
+  <div class="section-label">My Contribution</div>
+  <h2>Role as Co-Founder &amp; Product Lead</h2>
+  <div class="role-items">
+    <div class="role-item">
+      <p><strong>Problem definition &amp; research.</strong> Conducted 8+ user interviews validating the core hypothesis that people have groceries but lack the bridge to a meal. Synthesized findings into an insights document that shapes every product decision.</p>
+    </div>
+    <div class="role-item">
+      <p><strong>Product strategy &amp; scoping.</strong> Authored the PRD v2.0, pivoting from recipe-to-grocery-list to grocery-to-recipe — a simpler technical path with a clearer value proposition. Defined OKRs, success criteria, and a go/no-go decision framework for Week 19.</p>
+    </div>
+    <div class="role-item">
+      <p><strong>Architecture &amp; technical decisions.</strong> Selected the stack (React Native/Expo, Node.js/Express, PostgreSQL, Claude API). Made key calls: Context API over Redux, Firebase Auth over custom, Expo EAS for deployment, stateless recipe generation over conversation-based.</p>
+    </div>
+    <div class="role-item">
+      <p><strong>Prompt engineering.</strong> Designed the structured recipe generation prompt with JSON output, timer metadata per step, and skill-level calibration. Built A/B testing infrastructure via a Prompt_Versions table for iteration without code deploys.</p>
+    </div>
+    <div class="role-item">
+      <p><strong>Design direction.</strong> Led Figma wireframing for 7 core screens. Prioritized kitchen-friendly UX: large tap targets, arm's-length readability, keep-screen-awake during cooking mode.</p>
+    </div>
+    <div class="role-item">
+      <p><strong>Development planning.</strong> Authored the 19-week MVP Development Plan with scoped weekly deliverables, hour estimates, and a clear phased approach from foundation through beta validation.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<section id="timeline" class="reveal">
+  <div class="section-label">Roadmap</div>
+  <h2>19 weeks from scaffold to validation.</h2>
+  <p>Each phase ends with a testable deliverable. Total estimated effort: 550–690 hours full-time, or ~34 weeks part-time.</p>
+  <div class="timeline">
+    <div class="tl-phase active">
+      <div class="tl-dot"></div>
+      <div class="tl-header">
+        <span class="tl-title">Phase 0: Foundation</span>
+        <span class="tl-weeks">Weeks 1–2</span>
+      </div>
+      <p class="tl-desc">User interviews, problem validation, Figma wireframes, database schema, dev environment setup, and Claude API prompt prototyping.</p>
+      <span class="tl-hours">30–40 hrs</span>
+    </div>
+    <div class="tl-phase active">
+      <div class="tl-dot"></div>
+      <div class="tl-header">
+        <span class="tl-title">Phase 1: Core MVP Build</span>
+        <span class="tl-weeks">Weeks 3–9</span>
+      </div>
+      <p class="tl-desc">Authentication, inventory with autocomplete, AI recipe generation, recipe history &amp; ratings, and step-by-step cooking mode with integrated timers.</p>
+      <span class="tl-hours">280–330 hrs</span>
+    </div>
+    <div class="tl-phase">
+      <div class="tl-dot"></div>
+      <div class="tl-header">
+        <span class="tl-title">Phase 2: Polish &amp; Analytics</span>
+        <span class="tl-weeks">Weeks 10–11</span>
+      </div>
+      <p class="tl-desc">UI/UX refinement, performance optimization, analytics instrumentation (Mixpanel/Amplitude), prompt tuning, and internal testing with 5 friend/family testers.</p>
+      <span class="tl-hours">60–80 hrs</span>
+    </div>
+    <div class="tl-phase">
+      <div class="tl-dot"></div>
+      <div class="tl-header">
+        <span class="tl-title">Phase 3: Beta Preparation</span>
+        <span class="tl-weeks">Weeks 12–13</span>
+      </div>
+      <p class="tl-desc">Onboarding flow, in-app feedback mechanisms, TestFlight &amp; Play Console setup, and dry-run with 10 testers.</p>
+      <span class="tl-hours">60–80 hrs</span>
+    </div>
+    <div class="tl-phase">
+      <div class="tl-dot"></div>
+      <div class="tl-header">
+        <span class="tl-title">Phase 4: Beta Launch</span>
+        <span class="tl-weeks">Weeks 14–15</span>
+      </div>
+      <p class="tl-desc">Recruit and onboard 20–25 beta users from cooking subreddits and university communities. Daily monitoring, weekly surveys, rapid hotfixes.</p>
+      <span class="tl-hours">40–60 hrs</span>
+    </div>
+    <div class="tl-phase">
+      <div class="tl-dot"></div>
+      <div class="tl-header">
+        <span class="tl-title">Phase 5: Iteration &amp; Validation</span>
+        <span class="tl-weeks">Weeks 16–19</span>
+      </div>
+      <p class="tl-desc">Deep data analysis, 10+ user interviews, prompt iteration, 2–3 high-impact improvements, OKR evaluation, and go/no-go decision.</p>
+      <span class="tl-hours">80–100 hrs</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<section class="reveal">
+  <div class="section-label">Deep Dive</div>
+  <h2>Read the full docs.</h2>
+  <div class="links-grid" style="grid-template-columns: 1fr;">
+    <a href="https://docs.google.com/document/d/1cylF2A8eBRXL7kTu_v3P8ZLuSmYDOZ3_Mo3SFIuV0go/edit?usp=sharing" class="link-card" target="_blank" rel="noopener">
+      <div class="link-title">Product Requirements Document</div>
+      <p class="link-desc">PRD v3.0 — features, technical architecture, LLM strategy, data model, and risk register.</p>
+      <span class="link-arrow">Read PRD →</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  Nourish · Keon Lee · February 2026
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 10);
+  });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
