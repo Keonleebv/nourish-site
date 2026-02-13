@@ -377,20 +377,21 @@
     margin-top: 1.25rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
   }
   .role-item {
-    display: grid;
-    grid-template-columns: 6px 1fr;
-    gap: 1rem;
-    align-items: start;
+    padding-left: 1.25rem;
+    position: relative;
   }
-  .role-dot {
-    width: 6px;
-    height: 6px;
+  .role-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--c-accent);
-    margin-top: 0.55rem;
   }
   .role-item p { margin: 0; font-size: 0.95rem; }
 
@@ -420,9 +421,15 @@
     top: 2px;
     width: 16px;
     height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+    max-width: 16px;
+    max-height: 16px;
     border-radius: 50%;
     border: 3px solid var(--c-accent);
     background: var(--c-bg);
+    box-sizing: border-box;
+    display: block;
   }
   .tl-phase.active .tl-dot {
     background: var(--c-accent);
@@ -739,27 +746,27 @@
 
   <div class="role-items">
     <div class="role-item">
-      <div class="role-dot"></div>
+
       <p><strong>Problem definition &amp; research.</strong> Conducted 8+ user interviews validating the core hypothesis that people have groceries but lack the bridge to a meal. Synthesized findings into an insights document that shapes every product decision.</p>
     </div>
     <div class="role-item">
-      <div class="role-dot"></div>
+
       <p><strong>Product strategy &amp; scoping.</strong> Authored the PRD v2.0, pivoting from recipe-to-grocery-list to grocery-to-recipe — a simpler technical path with a clearer value proposition. Defined OKRs, success criteria, and a go/no-go decision framework for Week 19.</p>
     </div>
     <div class="role-item">
-      <div class="role-dot"></div>
+
       <p><strong>Architecture &amp; technical decisions.</strong> Selected the stack (React Native/Expo, Node.js/Express, PostgreSQL, Claude API). Made key calls: Context API over Redux, Firebase Auth over custom, Expo EAS for deployment, stateless recipe generation over conversation-based.</p>
     </div>
     <div class="role-item">
-      <div class="role-dot"></div>
+
       <p><strong>Prompt engineering.</strong> Designed the structured recipe generation prompt with JSON output, timer metadata per step, and skill-level calibration. Built A/B testing infrastructure via a Prompt_Versions table for iteration without code deploys.</p>
     </div>
     <div class="role-item">
-      <div class="role-dot"></div>
+
       <p><strong>Design direction.</strong> Led Figma wireframing for 7 core screens. Prioritized kitchen-friendly UX: large tap targets, arm's-length readability, keep-screen-awake during cooking mode.</p>
     </div>
     <div class="role-item">
-      <div class="role-dot"></div>
+
       <p><strong>Development planning.</strong> Authored the 19-week MVP Development Plan with scoped weekly deliverables, hour estimates, and a clear phased approach from foundation through beta validation.</p>
     </div>
   </div>
