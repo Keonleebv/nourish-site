@@ -243,44 +243,55 @@
   }
   .role-item p { margin: 0; font-size: 0.95rem; }
 
-  /* ---- TIMELINE ---- */
-  .timeline { margin-top: 1.5rem; position: relative; }
-  .timeline::before {
-    content: ''; position: absolute;
-    left: 7px; top: 0; bottom: 0;
-    width: 2px; background: var(--c-border);
+  /* ---- TRACTION / PROGRESS ---- */
+  .traction-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1rem; margin-top: 1.5rem; margin-bottom: 2rem;
   }
-  .tl-phase {
-    position: relative; padding-left: 36px; padding-bottom: 2rem;
+  .traction-card {
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: 12px; padding: 1.4rem 1.5rem; text-align: center;
   }
-  .tl-phase:last-child { padding-bottom: 0; }
-  .tl-dot {
-    position: absolute; left: 0; top: 2px;
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    border: 3px solid var(--c-accent);
-    background: var(--c-bg);
-    box-sizing: border-box;
+  .traction-number {
+    font-family: var(--font-display);
+    font-size: 2.2rem; color: var(--c-accent-dark);
+    line-height: 1.1; margin-bottom: 0.3rem;
   }
-  .tl-phase.active .tl-dot {
-    background: var(--c-accent);
-    box-shadow: 0 0 0 4px var(--c-accent-light);
+  .traction-label {
+    font-size: 0.82rem; color: var(--c-text-muted);
+    font-weight: 500; line-height: 1.4;
   }
-  .tl-header {
-    display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap;
+
+  .progress-list {
+    margin-top: 1.25rem; display: flex; flex-direction: column; gap: 0.6rem;
   }
-  .tl-title { font-weight: 600; font-size: 1rem; color: var(--c-text); }
-  .tl-weeks { font-size: 0.8rem; color: var(--c-text-muted); font-weight: 500; }
-  .tl-desc {
-    font-size: 0.88rem; color: var(--c-text-secondary);
-    margin-top: 0.3rem; line-height: 1.6;
+  .progress-item {
+    display: flex; align-items: flex-start; gap: 0.7rem;
+    font-size: 0.92rem; color: var(--c-text-secondary);
   }
-  .tl-hours {
-    display: inline-block; font-size: 0.72rem; font-weight: 600;
-    letter-spacing: 0.05em; color: var(--c-accent);
-    background: var(--c-accent-light); padding: 0.15rem 0.55rem;
-    border-radius: 100px; margin-top: 0.4rem;
+  .progress-check {
+    width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; margin-top: 0.15rem;
   }
+  .progress-check.done {
+    background: var(--c-accent); color: white;
+  }
+  .progress-check.wip {
+    background: var(--c-warm-light); color: var(--c-warm);
+    border: 1.5px solid var(--c-warm);
+  }
+  .progress-check.next {
+    background: var(--c-card); color: var(--c-text-muted);
+    border: 1.5px solid var(--c-border);
+  }
+  .progress-phase-label {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-top: 1.5rem; margin-bottom: 0.5rem;
+  }
+  .progress-phase-label.done-label { color: var(--c-accent); }
+  .progress-phase-label.wip-label { color: var(--c-warm); }
+  .progress-phase-label.next-label { color: var(--c-text-muted); }
 
   /* ---- LINK CARDS ---- */
   .links-grid {
@@ -330,6 +341,7 @@
     .problem-grid, .diff-grid, .persona-grid, .links-grid {
       grid-template-columns: 1fr;
     }
+    .traction-grid { grid-template-columns: 1fr; }
     .hero { padding-top: 6.5rem; }
     .nav-links { gap: 1rem; }
     .nav-links a { font-size: 0.72rem; }
@@ -344,10 +356,10 @@
     <a href="#" class="nav-logo">Nourish</a>
     <div class="nav-links">
       <a href="#problem">Problem</a>
-      <a href="#vision">Vision</a>
+      <a href="#vision">How It Works</a>
       <a href="#users">Users</a>
       <a href="#role">Role</a>
-      <a href="#timeline">Timeline</a>
+      <a href="#progress">Progress</a>
     </div>
   </div>
 </nav>
@@ -355,15 +367,15 @@
 <header class="hero">
   <div class="hero-eyebrow">Building in Public</div>
   <h1>Turn what you have into <em>what you'll love to eat.</em></h1>
-  <p class="hero-sub">Nourish is an AI-powered cooking assistant that generates personalized recipes from the groceries already in your kitchen — then walks you through every step.</p>
+  <p class="hero-sub">Nourish is a personalized AI kitchen companion that scans your fridge, learns what you love, and generates recipes that get smarter every time you cook.</p>
   <div class="hero-meta">
     <div class="hero-meta-item">
       <strong>Keon Lee + Eddi Xie</strong>
-      Co-Founder &amp; Product Lead
+      Co-Founder, Product Lead &amp; Everything In Between
     </div>
     <div class="hero-meta-item">
       <strong>Feb 2026 – Present</strong>
-      19-week MVP sprint
+      5-week MVP sprint
     </div>
     <div class="hero-meta-item">
       <strong>React Native + Claude API</strong>
@@ -401,9 +413,9 @@
 <div class="divider"><hr></div>
 
 <section id="vision" class="reveal">
-  <div class="section-label">Core Flow</div>
-  <h2>From grocery list to dinner table.</h2>
-  <p>Nourish inverts the typical recipe app model. Instead of starting with a recipe and building a shopping list, we start with what's already in your kitchen and generate a recipe you can actually cook tonight.</p>
+  <div class="section-label">How It Works</div>
+  <h2>From fridge to table in one flow.</h2>
+  <p>Nourish inverts the typical recipe app. Instead of browsing recipes and building a shopping list, we start with what's already in your kitchen — then handle everything from there.</p>
   <div class="flow-steps">
     <div class="flow-step">
       <div class="flow-step-indicator">
@@ -411,8 +423,8 @@
         <div class="flow-step-line"></div>
       </div>
       <div class="flow-step-content">
-        <h3>Input your groceries</h3>
-        <p>Quick manual entry with fuzzy-match autocomplete across 1,000+ ingredients. Your kitchen inventory persists across sessions.</p>
+        <h3>Scan or add your groceries</h3>
+        <p>Snap a photo of your fridge or a grocery receipt and Claude Vision identifies your ingredients. Or type them manually with fuzzy-match autocomplete across 1,000+ items. Your kitchen inventory persists across sessions.</p>
       </div>
     </div>
     <div class="flow-step">
@@ -421,8 +433,8 @@
         <div class="flow-step-line"></div>
       </div>
       <div class="flow-step-content">
-        <h3>Set your preferences</h3>
-        <p>Dietary restrictions, skill level, time budget, servings, and meal type. Saved to your profile — set once, used every time.</p>
+        <h3>Pick your star ingredients</h3>
+        <p>Choose the proteins and carbs you want to feature, or tap "Surprise me" and let Nourish decide. Set your meal type, servings, cuisine, and time budget — preferences saved to your profile.</p>
       </div>
     </div>
     <div class="flow-step">
@@ -431,8 +443,8 @@
         <div class="flow-step-line"></div>
       </div>
       <div class="flow-step-content">
-        <h3>Generate a recipe with AI</h3>
-        <p>One tap. Claude generates a structured, skill-appropriate recipe with ingredients, nutrition, and integrated timer data — in under 5 seconds.</p>
+        <h3>Generate recipes with AI</h3>
+        <p>One tap. Claude Haiku generates 3 structured, skill-appropriate recipes with ingredients, nutrition, and timer metadata — streamed to your screen in seconds.</p>
       </div>
     </div>
     <div class="flow-step">
@@ -451,8 +463,8 @@
         <div class="flow-step-line"></div>
       </div>
       <div class="flow-step-content">
-        <h3>Rate, save, and cook again</h3>
-        <p>Rate recipes, save favorites to your cookbook, and browse your full history. Every recipe is stored so you never lose one.</p>
+        <h3>Rate, save, and keep learning</h3>
+        <p>Rate recipes, save favorites to your cookbook, and build a cooking history. Nourish learns your taste over time — every meal you cook makes the next suggestion better.</p>
       </div>
     </div>
   </div>
@@ -465,24 +477,24 @@
   <h2>Built different.</h2>
   <div class="diff-grid">
     <div class="diff-card">
+      <div class="diff-icon">📸</div>
+      <h3>Scan your fridge</h3>
+      <p>Snap a photo or scan a receipt. Claude Vision identifies your ingredients instantly — no manual entry required.</p>
+    </div>
+    <div class="diff-card">
       <div class="diff-icon">🧠</div>
       <h3>AI-first, not search-first</h3>
-      <p>Recipes generated on demand from your exact ingredients — not pulled from a static database.</p>
+      <p>Recipes generated on demand from your exact ingredients, dietary needs, and skill level — not pulled from a static database.</p>
     </div>
     <div class="diff-card">
-      <div class="diff-icon">🥬</div>
-      <h3>Inventory-driven</h3>
-      <p>Start with what you have, not what you need to buy. The fridge is the starting line.</p>
-    </div>
-    <div class="diff-card">
-      <div class="diff-icon">👩‍🍳</div>
-      <h3>Beginner-focused guidance</h3>
-      <p>Skill-calibrated recipes with step-by-step cooking mode and integrated timers.</p>
+      <div class="diff-icon">📈</div>
+      <h3>Gets smarter every meal</h3>
+      <p>Nourish learns your taste, tracks your skill progression, and adapts its suggestions. Your 20th recipe is personalized in ways your first one can't be.</p>
     </div>
     <div class="diff-card">
       <div class="diff-icon">⚡</div>
       <h3>One app, whole flow</h3>
-      <p>Inventory tracking, recipe generation, cooking guidance, and history — no app-switching.</p>
+      <p>Kitchen inventory, recipe generation, guided cooking mode, and history — no app-switching, no planning overhead.</p>
     </div>
   </div>
 </section>
@@ -519,89 +531,135 @@
 
 <section id="role" class="reveal">
   <div class="section-label">My Contribution</div>
-  <h2>Role as Co-Founder &amp; Product Lead</h2>
+  <h2>Co-Founder, Product Lead &amp; Everything In Between</h2>
   <div class="role-items">
     <div class="role-item">
       <p><strong>Problem definition &amp; research.</strong> Conducted 8+ user interviews validating the core hypothesis that people have groceries but lack the bridge to a meal. Synthesized findings into an insights document that shapes every product decision.</p>
     </div>
     <div class="role-item">
-      <p><strong>Product strategy &amp; scoping.</strong> Authored the PRD v2.0, pivoting from recipe-to-grocery-list to grocery-to-recipe — a simpler technical path with a clearer value proposition. Defined OKRs, success criteria, and a go/no-go decision framework for Week 19.</p>
+      <p><strong>Product strategy &amp; pivots.</strong> Authored the PRD across 5 major versions and the Development Plan through v5. Led pivots from recipe-to-grocery-list to grocery-to-recipe, added fridge/receipt scanning, redesigned the Cook tab with inline mode switching, and reduced onboarding from 5 steps to 2 — collecting remaining preferences contextually rather than upfront.</p>
     </div>
     <div class="role-item">
-      <p><strong>Architecture &amp; technical decisions.</strong> Selected the stack (React Native/Expo, Node.js/Express, PostgreSQL, Claude API). Made key calls: Context API over Redux, Firebase Auth over custom, Expo EAS for deployment, stateless recipe generation over conversation-based.</p>
+      <p><strong>Architecture &amp; technical decisions.</strong> Selected the stack (React Native/Expo, Node.js/Express, PostgreSQL, Claude API). Key calls: Context API over Redux, Firebase Auth over custom, Claude Vision for scanning, stateless generation with streaming SSE, tool-based structured outputs over prompt-described JSON.</p>
     </div>
     <div class="role-item">
-      <p><strong>Prompt engineering.</strong> Designed the structured recipe generation prompt with JSON output, timer metadata per step, and skill-level calibration. Built A/B testing infrastructure via a Prompt_Versions table for iteration without code deploys.</p>
+      <p><strong>LLM optimization &amp; prompt engineering.</strong> Ran a 28-call sensitivity analysis across 7 model/temperature configs to select Haiku 4.5 at 0.95 — the best variety-to-cost ratio. Designed the dual-mode prompt system that handles both ingredient lists and meal names via server-side auto-detection. Built input sanitization (50-char limits, XML tag wrapping, word count filters) to prevent prompt injection. Built A/B testing infrastructure via a Prompt_Versions table for iteration without code deploys.</p>
     </div>
     <div class="role-item">
-      <p><strong>Design direction.</strong> Led Figma wireframing for 7 core screens. Prioritized kitchen-friendly UX: large tap targets, arm's-length readability, keep-screen-awake during cooking mode.</p>
+      <p><strong>Design direction.</strong> Led Figma wireframing for 7+ core screens and built the Cook tab HTML prototype with animated plate canvas, per-meal-type glow system, star ingredient cards, and the More Options bottom sheet. Prioritized kitchen-friendly UX: large tap targets, arm's-length readability, keep-screen-awake during cooking mode.</p>
     </div>
     <div class="role-item">
-      <p><strong>Development planning.</strong> Authored the 19-week MVP Development Plan with scoped weekly deliverables, hour estimates, and a clear phased approach from foundation through beta validation.</p>
+      <p><strong>Full-stack development.</strong> Sole builder of the React Native frontend and Node.js/Express backend. Shipped Firebase auth and onboarding, 841-item ingredient autocomplete with Fuse.js fuzzy search, profile setup, and the profile tab. Built the Claude Vision integration for fridge photo and receipt scanning. Implemented the recipe generation pipeline end-to-end: prompt construction, dual-mode input handling, response validation, safety checks (blocklist scanning, cooking temp verification), prompt caching, and streaming via SSE. Built the Cook tab from HTML prototype to production — plate canvas with floating food icons, meal type picker, section toggle, hero card selection, Quick Cook input, servings stepper, and the More Options bottom sheet with cuisine, cook time, and zone-level ingredient exclusion.</p>
+    </div>
+    <div class="role-item">
+      <p><strong>Integration &amp; coordination.</strong> Defined the integration schedule across 4 merge milestones, coordinated feature boundaries with co-founder (generation pipeline vs recipe endpoints, cookbook tabs, cooking mode), and maintained 80%+ test coverage across the codebase.</p>
     </div>
   </div>
 </section>
 
 <div class="divider"><hr></div>
 
-<section id="timeline" class="reveal">
-  <div class="section-label">Roadmap</div>
-  <h2>19 weeks from scaffold to validation.</h2>
-  <p>Each phase ends with a testable deliverable. Total estimated effort: 550–690 hours full-time, or ~34 weeks part-time.</p>
-  <div class="timeline">
-    <div class="tl-phase active">
-      <div class="tl-dot"></div>
-      <div class="tl-header">
-        <span class="tl-title">Phase 0: Foundation</span>
-        <span class="tl-weeks">Weeks 1–2</span>
-      </div>
-      <p class="tl-desc">User interviews, problem validation, Figma wireframes, database schema, dev environment setup, and Claude API prompt prototyping.</p>
-      <span class="tl-hours">30–40 hrs</span>
+<section id="progress" class="reveal">
+  <div class="section-label">Progress</div>
+  <h2>Week 3 of 5.</h2>
+  <p>Three weeks of relentless building. Core generation loop, scanning, and inventory are live. Polishing the end-to-end cooking experience for beta.</p>
+
+  <div class="traction-grid">
+    <div class="traction-card">
+      <div class="traction-number">~$0.013</div>
+      <div class="traction-label">Cost per generation<br>(3 recipes)</div>
     </div>
-    <div class="tl-phase active">
-      <div class="tl-dot"></div>
-      <div class="tl-header">
-        <span class="tl-title">Phase 1: Core MVP Build</span>
-        <span class="tl-weeks">Weeks 3–9</span>
-      </div>
-      <p class="tl-desc">Authentication, inventory with autocomplete, AI recipe generation, recipe history &amp; ratings, and step-by-step cooking mode with integrated timers.</p>
-      <span class="tl-hours">280–330 hrs</span>
+    <div class="traction-card">
+      <div class="traction-number">~7s</div>
+      <div class="traction-label">Time to first content<br>(streamed via SSE)</div>
     </div>
-    <div class="tl-phase">
-      <div class="tl-dot"></div>
-      <div class="tl-header">
-        <span class="tl-title">Phase 2: Polish &amp; Analytics</span>
-        <span class="tl-weeks">Weeks 10–11</span>
-      </div>
-      <p class="tl-desc">UI/UX refinement, performance optimization, analytics instrumentation (Mixpanel/Amplitude), prompt tuning, and internal testing with 5 friend/family testers.</p>
-      <span class="tl-hours">60–80 hrs</span>
+    <div class="traction-card">
+      <div class="traction-number">28</div>
+      <div class="traction-label">API calls tested<br>across 7 configs</div>
     </div>
-    <div class="tl-phase">
-      <div class="tl-dot"></div>
-      <div class="tl-header">
-        <span class="tl-title">Phase 3: Beta Preparation</span>
-        <span class="tl-weeks">Weeks 12–13</span>
-      </div>
-      <p class="tl-desc">Onboarding flow, in-app feedback mechanisms, TestFlight &amp; Play Console setup, and dry-run with 10 testers.</p>
-      <span class="tl-hours">60–80 hrs</span>
+  </div>
+
+  <div class="progress-phase-label done-label">✓ Built &amp; Merged</div>
+  <div class="progress-list">
+    <div class="progress-item">
+      <div class="progress-check done">✓</div>
+      <span>Firebase Auth with onboarding flow (3 slides, signup/login, auth persistence)</span>
     </div>
-    <div class="tl-phase">
-      <div class="tl-dot"></div>
-      <div class="tl-header">
-        <span class="tl-title">Phase 4: Beta Launch</span>
-        <span class="tl-weeks">Weeks 14–15</span>
-      </div>
-      <p class="tl-desc">Recruit and onboard 20–25 beta users from cooking subreddits and university communities. Daily monitoring, weekly surveys, rapid hotfixes.</p>
-      <span class="tl-hours">40–60 hrs</span>
+    <div class="progress-item">
+      <div class="progress-check done">✓</div>
+      <span>Profile setup — reduced from 5 steps to 2 (dietary + skill only; cook time, kitchenware, cuisine collected contextually)</span>
     </div>
-    <div class="tl-phase">
-      <div class="tl-dot"></div>
-      <div class="tl-header">
-        <span class="tl-title">Phase 5: Iteration &amp; Validation</span>
-        <span class="tl-weeks">Weeks 16–19</span>
-      </div>
-      <p class="tl-desc">Deep data analysis, 10+ user interviews, prompt iteration, 2–3 high-impact improvements, OKR evaluation, and go/no-go decision.</p>
-      <span class="tl-hours">80–100 hrs</span>
+    <div class="progress-item">
+      <div class="progress-check done">✓</div>
+      <span>Kitchen inventory with 841-item Fuse.js fuzzy-match autocomplete and custom item support</span>
+    </div>
+    <div class="progress-item">
+      <div class="progress-check done">✓</div>
+      <span>Fridge photo scanning and receipt scanning via Claude Vision</span>
+    </div>
+    <div class="progress-item">
+      <div class="progress-check done">✓</div>
+      <span>AI recipe generation — dual-mode input (ingredients OR meal names), server-side auto-detection</span>
+    </div>
+    <div class="progress-item">
+      <div class="progress-check done">✓</div>
+      <span>Prompt engineering — 28-call sensitivity analysis, Haiku 4.5 at 0.95, structured outputs, prompt caching</span>
+    </div>
+    <div class="progress-item">
+      <div class="progress-check done">✓</div>
+      <span>Prompt_Versions A/B testing — iterate prompts and models without code deploys</span>
+    </div>
+    <div class="progress-item">
+      <div class="progress-check done">✓</div>
+      <span>Input sanitization — 50-char limits, XML tag wrapping, word count filters, blocklist scanning</span>
+    </div>
+    <div class="progress-item">
+      <div class="progress-check done">✓</div>
+      <span>Recipe history, ratings, and cookbook (To Cook / Cooked / Favourites tabs)</span>
+    </div>
+    <div class="progress-item">
+      <div class="progress-check done">✓</div>
+      <span>Step-by-step cooking mode with integrated countdown timers</span>
+    </div>
+    <div class="progress-item">
+      <div class="progress-check done">✓</div>
+      <span>Streaming via SSE — progressive recipe rendering, ~7s time to first content</span>
+    </div>
+    <div class="progress-item">
+      <div class="progress-check done">✓</div>
+      <span>Profile tab with edit sheets for dietary restrictions and skill level</span>
+    </div>
+  </div>
+
+  <div class="progress-phase-label wip-label">⟳ In Progress</div>
+  <div class="progress-list">
+    <div class="progress-item">
+      <div class="progress-check wip">⟳</div>
+      <span>Cook tab production build — star ingredient cards, plate canvas, meal-type glow, More Options sheet</span>
+    </div>
+    <div class="progress-item">
+      <div class="progress-check wip">⟳</div>
+      <span>RecipeSelectionScreen + RecipeDetailScreen — palette headers, match score, servings adjuster</span>
+    </div>
+  </div>
+
+  <div class="progress-phase-label next-label">→ Up Next</div>
+  <div class="progress-list">
+    <div class="progress-item">
+      <div class="progress-check next">→</div>
+      <span>Integration merge (IP-2.5 + IP-3) — full lifecycle: generate → select → cook → rate → cookbook</span>
+    </div>
+    <div class="progress-item">
+      <div class="progress-check next">→</div>
+      <span>Browse tab — seeded recipe catalog with category-mapped illustrations</span>
+    </div>
+    <div class="progress-item">
+      <div class="progress-check next">→</div>
+      <span>Analytics instrumentation (Mixpanel) and prompt tuning with real user data</span>
+    </div>
+    <div class="progress-item">
+      <div class="progress-check next">→</div>
+      <span>Beta launch — 20–25 users from cooking communities and university networks</span>
     </div>
   </div>
 </section>
@@ -611,17 +669,22 @@
 <section class="reveal">
   <div class="section-label">Deep Dive</div>
   <h2>Read the full docs.</h2>
-  <div class="links-grid" style="grid-template-columns: 1fr;">
+  <div class="links-grid">
     <a href="https://docs.google.com/document/d/1cylF2A8eBRXL7kTu_v3P8ZLuSmYDOZ3_Mo3SFIuV0go/edit?usp=sharing" class="link-card" target="_blank" rel="noopener">
       <div class="link-title">Product Requirements Document</div>
-      <p class="link-desc">PRD v3.0 — features, technical architecture, LLM strategy, data model, and risk register.</p>
+      <p class="link-desc">PRD v5.0 — features, architecture, LLM strategy, dual-mode input, and risk register.</p>
       <span class="link-arrow">Read PRD →</span>
+    </a>
+    <a href="https://github.com/keonleebv" class="link-card" target="_blank" rel="noopener">
+      <div class="link-title">GitHub</div>
+      <p class="link-desc">Source code, dev plans, and technical documentation.</p>
+      <span class="link-arrow">View repo →</span>
     </a>
   </div>
 </section>
 
 <footer>
-  Nourish · Keon Lee · February 2026
+  Nourish · Keon Lee + Eddi Xie · 2026
 </footer>
 
 <script>
